@@ -2,6 +2,12 @@ import socket
 import os
 import sys
 import ipaddress
+import pymongo
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
+
+uri = "mongodb+srv://brenden:bNOqLuT6vD2l65rt@cecs327assignment7.mvzpl.mongodb.net/?retryWrites=true&w=majority&appName=CECS327Assignment7"
+client = MongoClient(uri, server_api=ServerApi('1'))
 
 mySocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
