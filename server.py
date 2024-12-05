@@ -8,11 +8,14 @@ from pymongo.server_api import ServerApi
 
 uri = "mongodb+srv://brenden:bNOqLuT6vD2l65rt@cecs327assignment7.mvzpl.mongodb.net/?retryWrites=true&w=majority&appName=CECS327Assignment7"
 client = MongoClient(uri, server_api=ServerApi('1'))
+db = client["test"]
+meta = db["Table_metadata"]
+col = db["Table_virtual"]
 
 mySocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 server = input("Enter server IP address: ")
-port = input("Enter server port number: ")
+port = int(input("Enter server port number: "))
 
 mySocket.bind((server, port))
 mySocket.listen(5)
@@ -30,6 +33,10 @@ def main():
         if data == "STOP":
             print(f"Serving ending...")
             break
+
+        elif data == "TBD":
+            for item in col.find({'payload.asset_uid': "n43-l4s-165-p2l"}):
+                print(item["payload"]["Ammeter"])
 
         #Send and encode message to client
         print(f"Server sending: {data}")
