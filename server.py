@@ -5,8 +5,8 @@ import ipaddress
 
 mySocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-server = socket.gethostbyname(socket.gethostname())
-port = 5555
+server = input("Enter server IP address: ")
+port = input("Enter server port number: ")
 
 mySocket.bind((server, port))
 mySocket.listen(5)
