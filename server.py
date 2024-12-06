@@ -65,17 +65,26 @@ def main():
             fridge2 = 0
 
             #Fridge 1
-            for item in col.find({'time': {"$gt": datetime.now(timezone.utc) - timedelta(hours=3)},
+            for item in col.find({'time': {"$gt": datetime.now(timezone.utc) - timedelta(hours=24)},
                                   'payload.asset_uid': "n43-l4s-165-p2l"}):
                 fridge1 += Decimal(item["payload"]["Ammeter"])
             #Dishwasher
-            for item in col.find({'time': {"$gt": datetime.now(timezone.utc) - timedelta(hours=1)},
+            for item in col.find({'time': {"$gt": datetime.now(timezone.utc) - timedelta(hours=24)},
                                   'payload.asset_uid': "nw4-asg-55o-ug3"}):
-                dishwasher += Decimal(item["payload"]["Ammeter"])
+                dishwasher += Decimal(item["payload"]["Dishwasher Ammeter"])
             #Fridge 2
-            for item in col.find({'time': {"$gt": datetime.now(timezone.utc) - timedelta(hours=1)},
+            for item in col.find({'time': {"$gt": datetime.now(timezone.utc) - timedelta(hours=24)},
                                   'payload.asset_uid': "4a9-8so-qj3-7a1"}):
-                fridge2 += Decimal(item["payload"]["Ammeter"])
+                fridge2 += Decimal(item["payload"]["Ammeter 2"])
+
+            fridge1 /= Decimal(864.0)
+            dishwasher /= Decimal(864.0)
+            fridge2 /= Decimal(864.0)
+            fridge1kwh = round((fridge1 * 120 * 24) / Decimal(10000.0), 2)
+            dishwasherkwh = round((dishwasher * 120 * 24) / Decimal(10000.0), 2)
+            fridge2kwh = round((fridge2 * 120 * 24) / Decimal(10000.0), 2)
+            
+            data = f"Fridge 1 energy consumption: {fridge1kwh}kWh\nDishwasher energy consumption: {dishwasherkwh}kWh\nFridge 2 energy consumption: {fridge2kwh}kWh\n"
 
         #Send and encode message to client
         print(f"Server sending: {data}")
