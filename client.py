@@ -21,7 +21,7 @@ def main():
 
         # Receive message from server
         data = socket.recv(1024)
-        print(f"Recived: {data.decode('utf-8')}")
+        print(f"Received: {data.decode('utf-8')}")
 
 if __name__ == '__main__':
     main()  

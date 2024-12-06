@@ -3,6 +3,8 @@ import os
 import sys
 import ipaddress
 import pymongo
+from decimal import Decimal
+from datetime import datetime, timedelta, timezone
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
@@ -33,10 +35,16 @@ def main():
         if data == "STOP":
             print(f"Serving ending...")
             break
-
+        
         elif data == "TBD":
-            for item in col.find({'payload.asset_uid': "n43-l4s-165-p2l"}):
-                print(item["payload"]["Ammeter"])
+            total = 0
+            i = 0
+            for item in col.find({'time': {"$gt": datetime.now(timezone.utc) - timedelta(hours=3)},
+                                  'payload.asset_uid': "n43-l4s-165-p2l"}):
+                total += Decimal(item["payload"]["Moisture Meter - Fridge Moisture Meter"])
+                i += 1
+            average = round((Decimal(total / i) / Decimal(40.0)) * 100, 2)
+            data = f"Average moisture of kitchen fridge over past 3 hours: {average}%\n"
 
         #Send and encode message to client
         print(f"Server sending: {data}")
